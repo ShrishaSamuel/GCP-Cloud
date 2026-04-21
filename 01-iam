@@ -29,3 +29,5 @@ Privileged Access Manager (PAM): Allows for "Just-in-Time" access. Instead of ha
 Quick Knowledge Check
 1) If you grant a user the Owner role at the Project level, can they delete a storage bucket inside that project?
 - yes
+(The Permission Hierarchy
+Permissions in Google Cloud are inherited from the top down. If you grant a permission at the Project level, it automatically flows down to all "child" resources (like buckets, VM instances, or databases) within that project.)
