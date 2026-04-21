@@ -27,7 +27,32 @@ Policy Troubleshooter: If a developer says "I can't access this bucket," you plu
 Privileged Access Manager (PAM): Allows for "Just-in-Time" access. Instead of having Admin rights 24/7, you request them for 2 hours when you actually need to fix something.
 
 Quick Knowledge Check
-1) If you grant a user the Owner role at the Project level, can they delete a storage bucket inside that project?
+1. If you grant a user the Owner role at the Project level, can they delete a storage bucket inside that project?
 - yes
 (The Permission Hierarchy
 Permissions in Google Cloud are inherited from the top down. If you grant a permission at the Project level, it automatically flows down to all "child" resources (like buckets, VM instances, or databases) within that project.)
+
+2. Can a Project Editor delete a storage bucket?
+- yes
+(the Project Editor role (roles/editor) is quite powerful. It includes the storage.buckets.delete permission. While a "Storage Object Creator" or "Viewer" cannot delete a bucket, a Project Editor has full management rights over most resources within the project, including deleting buckets.)
+
+3. Can a Project Viewer download a file from a private bucket?
+- no
+(A Project Viewer (roles/viewer) can see that the bucket and the files exist (metadata), but they do not have the storage.objects.get permission required to actually download or read the data within the files.)
+
+4. If IAM is removed but the user is still on the ACL, can they access data?
+- YES, they can still access it.
+( This is a common point of confusion. Cloud Storage uses a union of IAM and Access Control Lists (ACLs).
+- If a user is granted access in either system, they have access.
+- Removing the IAM role does not automatically "scrub" them from the ACL.
+- Pro Tip: This is why Google recommends using Uniform Bucket-Level Access, which disables ACLs entirely so you only have to manage IAM.)
+
+5. Does an Org-level Storage Admin need project-level permissions?
+- no
+(IAM permissions in GCP are hierarchical. If you grant a role at the Organization level, it "flows down" through every Folder and Project within that Org. They will have full power over every bucket in the company without you needing to click a single button at the project level.)
+
+Editor deletes bucket - Editors have broad delete permissions.
+Viewer downloads file - Viewers see metadata but cannot read object data.
+ACL remains after IAM pull - Access is granted if either IAM or ACL allows it.
+Org-level Admin - Permissions inherit downward through the hierarchy.
+
